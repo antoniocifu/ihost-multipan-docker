@@ -117,7 +117,7 @@ you also need the [python-matter-server](https://github.com/home-assistant-libs/
 
 ### Firmware Update
 
-1. download the newer firmware from https://github.com/NabuCasa/silabs-firmware/tree/main/RCPMultiPAN/beta
+1. download the newer firmware from https://github.com/iHost-Open-Source-Project/hassio-ihost-sonoff-dongle-flasher/tree/main/firmware-build
 2. place them into your local directory `~/multipan/firmware/` (if your `/data` Volume mounted to `~/multipan/`)
 3. change the environment variable `FIRMWARE` to the new Filename (without path)
 4. change the environment variable `AUTOFLASH_FIRMWARE` to `1`
