@@ -36,11 +36,18 @@ RUN rm -rf /etc/s6-overlay/s6-rc.d/banner && \
     rm -rf /home/firmware && \
     rm -rf /root/*.gbl
 
-RUN \
-    apt-get update \
-    && apt-get install -y --no-install-recommends python3-pip \
-    && rm -rf /var/lib/apt/lists/* \
-    && pip install universal-silabs-flasher==0.0.31
+
+RUN if [ "$TARGETARCH" = "armv7" ]; then \
+        apt-get update && \
+        apt-get install -y --no-install-recommends \
+            python3-pip build-essential libffi-dev libssl-dev python3-dev \
+        && rm -rf /var/lib/apt/lists/*; \
+    else \
+        apt-get update && \
+        apt-get install -y --no-install-recommends python3-pip \
+        && rm -rf /var/lib/apt/lists/*; \
+    fi && \
+    pip install universal-silabs-flasher==0.0.31
 
 COPY rootfs /
 
