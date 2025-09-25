@@ -1,6 +1,6 @@
-# Silabs multiprotocol for HA docker installation
+# iHost Multipan Docker (Sonoff)
 
-This container is a **standalone** version of the [Silicon Labs multiprotocol addon for HAOS](https://skyconnect.home-assistant.io/procedures/enable-multiprotocol/). without the HAOS stuff.
+This is a standalone container based on the Sonoff iHost multiprotocol add-on (CPCD/OTBR/zigbeed), with no HAOS dependency. It works with ZHA/Zigbee2MQTT via EZSP over TCP and exposes the OTBR Web UI/API.
 
 ![](https://img.shields.io/github/license/b2un0/silabs-multipan-docker.svg)
 ![](https://img.shields.io/github/stars/b2un0/silabs-multipan-docker)
@@ -16,8 +16,7 @@ I have only provided a `standalone` version of the Silabs multiprotocol containe
 
 ## Credits
 
-Based on the work by [@nervousapps](https://github.com/nervousapps/haDOCKERaddons/tree/master/silabs-multiprotocol/dockerCustom)
-and [m33ts4k0z](https://github.com/m33ts4k0z/silabs-multipan-docker)
+Based on the work by [@nervousapps](https://github.com/nervousapps/haDOCKERaddons/tree/master/silabs-multiprotocol/dockerCustom), [m33ts4k0z](https://github.com/m33ts4k0z/silabs-multipan-docker), [b2un0](https://github.com/b2un0/silabs-multipan-docker), and the [iHost Open Source Project add-on](https://github.com/iHost-Open-Source-Project/hassio-ihost-addon/tree/master/hassio-ihost-silabs-multiprotocol).
 
 ## Versions
 
@@ -43,17 +42,17 @@ see [BASE.md](BASE.md)
 4. the name of your network interface (try `ifconfig` or `ip a`) to set `BACKBONE_IF` correctly
 5. the path of your Device like `/dev/tty???` (`/dev/serial/by-id/` will not work out of the box)
 6. **Zigbee channel and Thread channel must be configured to the same**
-7. Port `8081` is not in use because the OTBR API use is (can't be changed)
+7. OTBR REST API uses port `8081` (fixed); Web UI is on `8086`.
 
 ## environment variables
 
 take a look at the [Dockerfile](Dockerfile) file for more information
 
-## getting started
+## Getting Started
 
-⚠️ change `DEVICE` and `BACKBONE_IF` to your environment ⚠️
+⚠️ Change `DEVICE` and `BACKBONE_IF` for your environment ⚠️
 
-### as docker run
+### With docker run
 
 ```bash
 docker run --name multipan \
@@ -64,10 +63,10 @@ docker run --name multipan \
             --volume ~/multipan/:/data \
             --env DEVICE="/dev/ttyUSB0" \
             --env BACKBONE_IF="eth0" \
-            b2un0/silabs-multipan-docker:latest
+            antoniocifu/ihost-multipan-docker:latest
 ```
 
-### as docker compose
+### With docker compose
 
 1. download the [docker-compose.yml](docker-compose.yml) or copy the service to your existing one
 2. change the config in `environment` if necessary
@@ -75,7 +74,7 @@ docker run --name multipan \
 
 ## Setup OpenThread Border Router
 
-open in your browser `http://HOST:8086` and configure your OTBR
+Open `http://HOST:8086` and configure your OTBR.
 
 ## Home Assistant
 
@@ -88,8 +87,8 @@ add a new Device Integration `Open Thread Border Router` and use as Host `http:/
 1. Add the Zigbee Home Automation (`ZHA`) integration
 2. Choose `EZSP` as Radio type
 3. As serial path, enter `tcp://host_ip:20108` or `socket://host_ip:20108`
-4. Port speed `460800`
-5. flow control `hardware`
+4. Port speed `115200` (iHost default)
+5. Flow control `none` (iHost default). Adjust if your dongle requires otherwise.
 
 ## Setup Zigbee2MQTT
 
@@ -99,7 +98,7 @@ To use this with `Zigbee2MQTT` change the `configuration.yaml` file of Zigbee2MQ
 serial:
   port: tcp://host_ip:20108
   adapter: ezsp
-  baudrate: 460800
+  baudrate: 115200
 ```
 
 Restart `Zigbee2MQTT`.

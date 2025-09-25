@@ -25,5 +25,5 @@ jobs:
       - name: purge container packages
         uses: dylanratcliffe/delete-untagged-containers@main
         with:
-          package_name: 'silabs-multipan-docker'
+          package_name: 'ihost-multipan-docker'
           token: ${{ secrets.GITHUB_TOKEN }}

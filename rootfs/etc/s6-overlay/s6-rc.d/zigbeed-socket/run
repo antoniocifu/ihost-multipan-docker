@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv bash
+# ==============================================================================
+# Start EmberZNet Zigbee Daemon - PTY bridge (socket)
+# ==============================================================================
+set -euo pipefail
+source /etc/bashlog/log.sh
+
+log 'info' "Starting zigbeed-socket..."
+exec /usr/bin/socat pty,link=/tmp/ttyZigbee,raw,echo=0 pty,link=/tmp/ttyZigbeeNCP,raw,echo=0

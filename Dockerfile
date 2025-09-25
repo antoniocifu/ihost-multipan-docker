@@ -1,12 +1,14 @@
-ARG BASE_VERSION
-FROM homeassistant/${TARGETARCH}-addon-silabs-multiprotocol:${BASE_VERSION}
+ARG BASE_VERSION=1.0.0
+ARG TARGETARCH
+
+FROM ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64:${BASE_VERSION}
 
 ENV S6_VERBOSITY=3 \
     DEVICE="/dev/ttyUSB0" \
-    BAUDRATE="460800" \
+    BAUDRATE="115200" \
     CPCD_TRACE="false" \
     CPCP_DISABLE_ENCRYPTION="true" \
-    FLOW_CONTROL="true" \
+    FLOW_CONTROL="false" \
     NETWORK_DEVICES=0 \
     OTBR_ENABLE=1 \
     BACKBONE_IF="eth0" \
@@ -32,6 +34,12 @@ RUN rm -rf /etc/s6-overlay/s6-rc.d/banner && \
     rm -rf firmware && \
     rm -rf /home/firmware && \
     rm -rf /root/*.gbl
+
+RUN \
+    apt-get update \
+    && apt-get install -y --no-install-recommends python3-pip \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install universal-silabs-flasher==0.0.31
 
 COPY rootfs /
 

@@ -1,3 +1,3 @@
 # Base
 
-https://github.com/home-assistant/addons/tree/master/silabs-multiprotocol
+https://github.com/iHost-Open-Source-Project/hassio-ihost-addon/tree/master/hassio-ihost-silabs-multiprotocol

@@ -2,7 +2,7 @@ version: "3.9"
 services:
   multipan:
     container_name: multipan
-    image: b2un0/silabs-multipan-docker:latest
+    image: antoniocifu/ihost-multipan-docker:latest
     restart: unless-stopped
     privileged: true # don't change this !
     network_mode: host # don't change this !
@@ -13,8 +13,8 @@ services:
       - ~/multipan/:/data
     environment:
       DEVICE: "/dev/ttyUSB0" # only change if your have multiple devices
-      BAUDRATE: "460800"
-      FLOW_CONTROL: "true" # change to false if you not using SkyConnect
+      BAUDRATE: "115200"
+      FLOW_CONTROL: "false" # set true if your dongle requires it
 
       BACKBONE_IF: "eth0" # change this to your network interface
       OTBR_REST_LISTEN_PORT: "8081" # use this within the HomeAssistant integration
@@ -25,4 +25,4 @@ services:
 
       # UNIVERSAL FLASHER variables
       AUTOFLASH_FIRMWARE: 0 # change to 1 for firmware update
-      FIRMWARE: "NabuCasa_SkyConnect_RCP_v4.3.1_rcp-uart-hw-802154_460800.gbl"
+      # FIRMWARE: "donglee_mg21_multipan_beta_4.6.0_115200.gbl"

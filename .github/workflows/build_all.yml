@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  REPO_URL: "https://registry.hub.docker.com/v2/namespaces/homeassistant/repositories/amd64-addon-silabs-multiprotocol/tags?page=1&page_size=1000"
+  REPO_URL: "https://ghcr.io/v2/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64/tags/list"
 
 jobs:
   provide_versions:
@@ -15,7 +15,9 @@ jobs:
     steps:
       - name: get all tags
         id: tags
-        run: echo matrix=$(curl -s '${{ env.REPO_URL }}' | jq -r '.results | reverse') >> $GITHUB_OUTPUT
+        run: |
+          curl -sL '${{ env.REPO_URL }}' | jq -r '.tags | map({name: .}) | reverse' | sed 's/"latest"/"skip-latest"/g' | sed 's/skip-latest/latest/'
+          echo matrix=$(curl -sL '${{ env.REPO_URL }}' | jq -r '.tags | map({name: .}) | reverse') >> $GITHUB_OUTPUT
       - name: count tags
         run: jq -r 'length' <<< '${{ steps.tags.outputs.matrix }}'
 

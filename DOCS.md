@@ -1,3 +1,3 @@
 # Docs
 
-https://github.com/home-assistant/addons/blob/master/silabs-multiprotocol/DOCS.md
+https://github.com/iHost-Open-Source-Project/hassio-ihost-addon/tree/master/hassio-ihost-silabs-multiprotocol/DOCS.md
