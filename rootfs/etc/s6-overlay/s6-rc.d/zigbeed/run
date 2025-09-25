@@ -8,6 +8,6 @@ mkdir -p /data/zigbeed && cd /data/zigbeed || log 'error' "Could not change to z
 
 log 'info' "Starting zigbeed..."
 exec /usr/local/bin/zigbeed --radio-url "spinel+cpc://cpcd_0?iid=1&iid-list=0" \
+                            --ezsp-interface /tmp/ttyZigbeeNCP
                         #    --ezsp-listen "::" \
                         #    --ezsp-listen-port ${EZSP_LISTEN_PORT}
-                            --ezsp-interface /tmp/ttyZigbeeNCP
