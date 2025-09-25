@@ -13,6 +13,17 @@ on:
 
 jobs:
   build_version:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [linux/amd64, linux/arm64, linux/arm/v7]
+        include:
+          - platform: linux/amd64
+            base_image_suffix: amd64
+          - platform: linux/arm64
+            base_image_suffix: aarch64 # o arm64
+          - platform: linux/arm/v7
+            base_image_suffix: armv7
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -54,16 +65,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          # Provide upstream iHost images as build contexts for the Dockerfile base:
-          # ihost/amd64 -> ghcr.io/...-amd64, ihost/arm64 -> ghcr.io/...-aarch64, ihost/arm -> ghcr.io/...-armv7
-          build-contexts: |
-            ihost/amd64:${{ env.BASE_VERSION }}=docker-image://ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64:${{ env.BASE_VERSION }}
-            ihost/arm64:${{ env.BASE_VERSION }}=docker-image://ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-aarch64:${{ env.BASE_VERSION }}
-            ihost/arm:${{ env.BASE_VERSION }}=docker-image://ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-armv7:${{ env.BASE_VERSION }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: ${{ matrix.platform }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
           build-args: |
             BASE_VERSION=${{ env.BASE_VERSION }}
+            BASE_IMAGE_NAME=ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-${{ matrix.base_image_suffix }}
