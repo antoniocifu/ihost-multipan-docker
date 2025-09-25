@@ -13,17 +13,6 @@ on:
 
 jobs:
   build_version:
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [linux/amd64, linux/arm64, linux/arm/v7]
-        include:
-          - platform: linux/amd64
-            base_image_suffix: amd64
-          - platform: linux/arm64
-            base_image_suffix: aarch64 # o arm64
-          - platform: linux/arm/v7
-            base_image_suffix: armv7
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -65,11 +54,15 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: ${{ matrix.platform }}
+          # create an alias for arm64 (TARGETARCH in build arg) from the existing aarch64 image
+          # create an alias for arm (TARGETARCH in build arg) from the existing armv7 image
+          build-contexts: |
+            ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-arm64:${{ env.BASE_VERSION }}=docker-image://ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-aarch64:${{ env.BASE_VERSION }}
+            ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-arm:${{ env.BASE_VERSION }}=docker-image://ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-armv7:${{ env.BASE_VERSION }}
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
           build-args: |
             BASE_VERSION=${{ env.BASE_VERSION }}
-            BASE_IMAGE_NAME=ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-${{ matrix.base_image_suffix }}

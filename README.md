@@ -123,12 +123,6 @@ you also need the [python-matter-server](https://github.com/home-assistant-libs/
 4. change the environment variable `AUTOFLASH_FIRMWARE` to `1`
 5. redeploy your container
 
-Note on ARMv7 (armhf):
-
-- The universal-silabs-flasher tool is preinstalled on amd64 and arm64 images only. On armv7 it is intentionally skipped to avoid build failures. We plan to add safe support for armv7 in the future.
-- If you still need to flash on armv7, you can install it at runtime inside the container (advanced users only):
-  - pip3 install --no-cache-dir universal-silabs-flasher==0.0.31
-  - Proceed at your own risk; this path is not officially supported yet.
 
 ## Upstream Base (Sonoff iHost)
 
