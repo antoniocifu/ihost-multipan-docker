@@ -2,7 +2,7 @@
   <configuration default="false" name="local-test" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
-        <option name="imageTag" value="b2un0/silabs-multipan-docker:dev" />
+  <option name="imageTag" value="antoniocifu/ihost-multipan-docker:dev" />
         <option name="buildArgs">
           <list>
             <DockerEnvVarImpl>
@@ -11,7 +11,7 @@
             </DockerEnvVarImpl>
           </list>
         </option>
-        <option name="containerName" value="silabs-multipan-docker" />
+  <option name="containerName" value="ihost-multipan-docker" />
         <option name="sourceFilePath" value="Dockerfile" />
       </settings>
     </deployment>

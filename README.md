@@ -1,18 +1,25 @@
-# iHost Multipan Docker (Sonoff)
+# Silabs multiprotocol for iHost HA docker installation (Sonoff)
 
 This is a standalone container based on the Sonoff iHost multiprotocol add-on (CPCD/OTBR/zigbeed), with no HAOS dependency. It works with ZHA/Zigbee2MQTT via EZSP over TCP and exposes the OTBR Web UI/API.
 
-![](https://img.shields.io/github/license/b2un0/silabs-multipan-docker.svg)
-![](https://img.shields.io/github/stars/b2un0/silabs-multipan-docker)
-![](https://img.shields.io/docker/v/b2un0/silabs-multipan-docker)
-![](https://img.shields.io/docker/pulls/b2un0/silabs-multipan-docker.svg)
-![](https://img.shields.io/docker/image-size/b2un0/silabs-multipan-docker.svg)
+![](https://img.shields.io/github/license/antoniocifu/ihost-multipan-docker.svg)
+![](https://img.shields.io/github/stars/antoniocifu/ihost-multipan-docker)
+![](https://img.shields.io/docker/v/antoniocifu/ihost-multipan-docker)
+![](https://img.shields.io/docker/pulls/antoniocifu/ihost-multipan-docker.svg)
+![](https://img.shields.io/docker/image-size/antoniocifu/ihost-multipan-docker.svg)
 
 # ❗ Attention ❗
 
 I do not provide any support for the software running in this container.
 
 I have only provided a `standalone` version of the Silabs multiprotocol container which can run **without** `HAOS`
+
+## Project lineage and scope
+
+- Original project: https://github.com/b2un0/silabs-multipan-docker — it provided a standalone container aligned with the Home Assistant add-on: https://github.com/home-assistant/addons/tree/master/silabs-multiprotocol
+- This repository: https://github.com/antoniocifu/ihost-multipan-docker — it provides a standalone container aligned with the Sonoff iHost add-on: https://github.com/iHost-Open-Source-Project/hassio-ihost-addon/tree/master/hassio-ihost-silabs-multiprotocol
+
+This repo focuses on the iHost add-on stack and does not aim to support the Home Assistant add-on.
 
 ## Credits
 
@@ -116,11 +123,10 @@ you also need the [python-matter-server](https://github.com/home-assistant-libs/
 4. change the environment variable `AUTOFLASH_FIRMWARE` to `1`
 5. redeploy your container
 
-## Docker Base Images
+## Upstream Base (Sonoff iHost)
 
-| arch    | url                                                                       |
-|---------|---------------------------------------------------------------------------|
-| aarch64 | https://hub.docker.com/r/homeassistant/aarch64-addon-silabs-multiprotocol |
-| amd64   | https://hub.docker.com/r/homeassistant/amd64-addon-silabs-multiprotocol   |
-| armv7   | https://hub.docker.com/r/homeassistant/arm-addon-silabs-multiprotocol     |
-| i386    | not exists (not supported by HA)                                          |
+This image derives from the Sonoff iHost multiprotocol add-on images on GHCR:
+
+- ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-aarch64:<tag>
+- ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64:<tag>
+- ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-armv7:<tag>

@@ -1,7 +1,7 @@
 ARG BASE_VERSION=1.0.0
 ARG TARGETARCH
 
-FROM ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64:${BASE_VERSION}
+FROM ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-${TARGETARCH}:${BASE_VERSION}
 
 ENV S6_VERBOSITY=3 \
     DEVICE="/dev/ttyUSB0" \
