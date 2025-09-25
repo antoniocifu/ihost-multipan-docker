@@ -30,8 +30,12 @@ jobs:
       - name: self version
         id: self_version
         run: |
-          docker pull antoniocifu/ihost-multipan-docker:latest
-          echo self_version=$(docker inspect antoniocifu/ihost-multipan-docker:latest --format '{{ index .Config.Labels "org.opencontainers.image.version"}}') >> $GITHUB_OUTPUT
+          docker pull antoniocifu/ihost-multipan-docker:latest || echo "No existing latest image on Docker Hub yet."
+          if docker image inspect antoniocifu/ihost-multipan-docker:latest > /dev/null 2>&1; then
+            echo self_version=$(docker inspect antoniocifu/ihost-multipan-docker:latest --format '{{ index .Config.Labels "org.opencontainers.image.version"}}') >> $GITHUB_OUTPUT
+          else
+            echo self_version= >> $GITHUB_OUTPUT
+          fi
 
       - name: show self version
         run: |
