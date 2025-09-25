@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+env:
+  UPSTREAM_REPO: ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64
+
 jobs:
   get_versions:
     runs-on: ubuntu-latest
@@ -12,11 +15,13 @@ jobs:
       base_version: ${{ steps.base_version.outputs.base_version }}
       self_version: ${{ steps.self_version.outputs.self_version }}
     steps:
-      - name: base version
+      - name: base version (from GHCR tags)
         id: base_version
         run: |
-          docker pull ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64:latest
-          echo base_version=$(docker inspect ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64:latest --format '{{ index .Config.Labels "org.opencontainers.image.version"}}') >> $GITHUB_OUTPUT
+          TOKEN=$(curl -fsSL -u "${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/token?service=ghcr.io&scope=repository:${{ env.UPSTREAM_REPO }}:pull" | jq -r '.token')
+          TAGS_JSON=$(curl -fsSL -H "Authorization: Bearer ${TOKEN}" "https://ghcr.io/v2/${{ env.UPSTREAM_REPO }}/tags/list")
+          BASE_TAG=$(echo "$TAGS_JSON" | jq -r '.tags | map(select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))) | sort_by((split(".")|map(tonumber))) | last')
+          echo base_version=${BASE_TAG:-1.0.0} >> $GITHUB_OUTPUT
 
       - name: show base version
         run: |

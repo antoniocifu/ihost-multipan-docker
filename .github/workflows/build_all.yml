@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 env:
+  UPSTREAM_REPO: ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64
   REPO_URL: "https://ghcr.io/v2/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64/tags/list"
 
 jobs:
@@ -13,11 +14,12 @@ jobs:
     outputs:
       matrix: ${{ steps.tags.outputs.matrix }}
     steps:
-      - name: get all tags
+      - name: get all tags (auth to GHCR)
         id: tags
         run: |
-          curl -sL '${{ env.REPO_URL }}' | jq -r '.tags | map({name: .}) | reverse' | sed 's/"latest"/"skip-latest"/g' | sed 's/skip-latest/latest/'
-          echo matrix=$(curl -sL '${{ env.REPO_URL }}' | jq -r '.tags | map({name: .}) | reverse') >> $GITHUB_OUTPUT
+          TOKEN=$(curl -fsSL -u "${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/token?service=ghcr.io&scope=repository:${{ env.UPSTREAM_REPO }}:pull" | jq -r '.token')
+          curl -sSL -H "Authorization: Bearer ${TOKEN}" '${{ env.REPO_URL }}' | jq -r '.tags | map({name: .}) | reverse' | sed 's/"latest"/"skip-latest"/g' | sed 's/skip-latest/latest/'
+          echo matrix=$(curl -sSL -H "Authorization: Bearer ${TOKEN}" '${{ env.REPO_URL }}' | jq -r '.tags | map({name: .}) | reverse') >> $GITHUB_OUTPUT
       - name: count tags
         run: jq -r 'length' <<< '${{ steps.tags.outputs.matrix }}'
 
