@@ -1,7 +1,8 @@
 ARG BASE_VERSION=1.0.0
 ARG TARGETARCH
 
-FROM ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-${TARGETARCH}:${BASE_VERSION}
+# Base image provided via buildx build-contexts (see workflow): ihost/${TARGETARCH}:${BASE_VERSION}
+FROM ihost/${TARGETARCH}:${BASE_VERSION}
 
 ENV S6_VERBOSITY=3 \
     DEVICE="/dev/ttyUSB0" \

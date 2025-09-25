@@ -54,6 +54,12 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          # Provide upstream iHost images as build contexts for the Dockerfile base:
+          # ihost/amd64 -> ghcr.io/...-amd64, ihost/arm64 -> ghcr.io/...-aarch64, ihost/arm -> ghcr.io/...-armv7
+          build-contexts: |
+            ihost/amd64:${{ env.BASE_VERSION }}=docker-image://ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-amd64:${{ env.BASE_VERSION }}
+            ihost/arm64:${{ env.BASE_VERSION }}=docker-image://ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-aarch64:${{ env.BASE_VERSION }}
+            ihost/arm:${{ env.BASE_VERSION }}=docker-image://ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-armv7:${{ env.BASE_VERSION }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: ${{ steps.meta.outputs.tags }}
