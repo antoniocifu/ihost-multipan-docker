@@ -22,7 +22,3 @@ services:
 
       # ZIGBEED environment variables
       EZSP_LISTEN_PORT: "20108" #
-
-      # UNIVERSAL FLASHER variables
-      AUTOFLASH_FIRMWARE: 0 # change to 1 for firmware update
-      # FIRMWARE: "donglee_mg21_multipan_beta_4.6.0_115200.gbl"

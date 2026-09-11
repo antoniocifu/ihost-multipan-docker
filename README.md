@@ -83,6 +83,17 @@ docker run --name multipan \
 
 Open `http://HOST:8086` and configure your OTBR.
 
+## Firmware flashing
+
+This image does not install or run `universal-silabs-flasher`. Flash the Silicon Labs device before starting the container, from the host or another dedicated environment. For example, install the tool on the host and run:
+
+```bash
+python3 -m pip install universal-silabs-flasher
+universal-silabs-flasher --device /dev/ttyUSB0 --help
+```
+
+Use the command and firmware options required by your adapter, then start or restart the container. Replace `/dev/ttyUSB0` with the actual device path.
+
 ## Home Assistant
 
 ### OTBR
@@ -114,15 +125,6 @@ It might take a couple of tries for `Zigbee2MQTT` to connect the first time, but
 ## Matter
 
 you also need the [python-matter-server](https://github.com/home-assistant-libs/python-matter-server) if you want to use Matter enabled devices with Home Assistant.
-
-### Firmware Update
-
-1. download the newer firmware from https://github.com/iHost-Open-Source-Project/hassio-ihost-sonoff-dongle-flasher/tree/main/firmware-build
-2. place them into your local directory `~/multipan/firmware/` (if your `/data` Volume mounted to `~/multipan/`)
-3. change the environment variable `FIRMWARE` to the new Filename (without path)
-4. change the environment variable `AUTOFLASH_FIRMWARE` to `1`
-5. redeploy your container
-
 
 ## Upstream Base (Sonoff iHost)
 

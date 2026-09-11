@@ -1,6 +1,5 @@
 ARG BASE_VERSION=1.0.0
-ARG TARGETARCH=amd64
-
+ARG TARGETARCH
 FROM ghcr.io/ihost-open-source-project/hassio-ihost-silabs-multiprotocol-${TARGETARCH}:${BASE_VERSION}
 
 ENV S6_VERBOSITY=3 \
@@ -17,13 +16,10 @@ ENV S6_VERBOSITY=3 \
     OTBR_REST_LISTEN_PORT="8081" \
     OTBR_WEB_PORT="8086" \
     NETWORK_DEVICE="" \
-    EZSP_LISTEN_PORT="20108"\
-    AUTOFLASH_FIRMWARE=0 \
-    FIRMWARE=""
+    EZSP_LISTEN_PORT="20108"
 
 RUN rm -rf /etc/s6-overlay/s6-rc.d/banner && \
     rm -rf /etc/s6-overlay/scripts/banner.sh && \
-    rm -rf /etc/s6-overlay/s6-rc.d/universal-silabs-flasher/dependencies.d && \
     rm -rf /etc/s6-overlay/s6-rc.d/otbr-agent-rest-discovery && \
     rm -rf /etc/s6-overlay/scripts/otbr-agent-rest-discovery.sh && \
     rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/otbr-agent-rest-discovery && \
@@ -34,19 +30,6 @@ RUN rm -rf /etc/s6-overlay/s6-rc.d/banner && \
     rm -rf firmware && \
     rm -rf /home/firmware && \
     rm -rf /root/*.gbl
-
-
-RUN if [ "$TARGETARCH" = "armv7" ]; then \
-        apt-get update && \
-        apt-get install -y --no-install-recommends \
-            python3-pip build-essential libffi-dev libssl-dev python3-dev \
-        && rm -rf /var/lib/apt/lists/*; \
-    else \
-        apt-get update && \
-        apt-get install -y --no-install-recommends python3-pip \
-        && rm -rf /var/lib/apt/lists/*; \
-    fi && \
-    pip install universal-silabs-flasher==0.0.31
 
 COPY rootfs /
 
